@@ -2,9 +2,9 @@
 
 ## Estado comprobado del repositorio
 
-Al 2026-09-17 este repositorio no contiene `package.json`, código TypeScript, configuración React/Angular, rutas, estilos/tokens, pruebas ni documentación de un diseño Stitch/AI Studio aprobado. No hay HU, criterios de aceptación ni DoD disponibles en este repositorio.
+Al 2026-09-22 este repositorio contiene React 19 + TypeScript + Vite importado en `develop`, componentes del prototipo y trabajo local de integración de autenticación con pruebas. Ese trabajo debe verificarse antes de declararlo completado; la evidencia de aprobación visual sigue siendo necesaria.
 
-No elegir React ni Angular hasta que el estudiante importe el proyecto generado por Google AI Studio. Tras esa importación, inspeccionar primero `package.json`, configuración, estructura de `src`, enrutamiento, estilos/tokens, scripts y la documentación/artefactos del diseño aprobado antes de proponer cambios.
+El framework detectado es React. Antes de proponer cambios, inspeccionar `package.json`, configuración, `src`, estilos/tokens, scripts, pruebas y documentación/artefactos del diseño aprobado.
 
 ## Responsabilidad exclusiva
 
@@ -34,8 +34,8 @@ La UI consume `citas-api` directamente por REST. No añadir Express, BFF ni lóg
 - No hardcodear tokens, secretos ni credenciales; no registrarlos en consola.
 - Tratar validaciones, disponibilidad, transiciones de cita, autorización y ownership como decisiones finales del backend. El cliente puede mejorar la experiencia, pero no sustituye la validación server-side.
 - Si falta o cambia un contrato REST, reportarlo al orquestador con el endpoint, payload, respuesta/error esperado, pantallas afectadas y evidencia requerida. No editar `../citas-api`.
-- No mantener una LLM Wiki propia; la memoria global está en `citas-api/docs/wiki/llm-wiki/` bajo responsabilidad del orquestador.
+- No mantener una LLM Wiki propia; la memoria global está en `citas-api/docs/FCV Dev/llm-wiki/` bajo responsabilidad del orquestador.
 
 ## Git
 
-`main` es estable y `develop` es la rama de trabajo definida por el workspace. Actualmente solo existe `main`; no crear ni cambiar ramas como efecto incidental de una tarea de documentación. Preservar cambios no relacionados y no reescribir historial.
+`main` es estable y `develop` es la rama de trabajo definida por el workspace. Preservar cambios no relacionados y no reescribir historial.

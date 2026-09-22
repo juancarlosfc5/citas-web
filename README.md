@@ -1,13 +1,21 @@
 # citas-web
 
-Repositorio frontend. **Comienza vacío de aplicación** porque cada estudiante debe:
+Cliente React + TypeScript del portal de citas, importado del prototipo aprobado y conectado directamente a `citas-api`.
 
-1. diseñar su interfaz con la Skill `stitch-design-to-frontend`;
-2. aprobar el diseño;
-3. exportar/continuar en Google AI Studio;
-4. elegir React o Angular;
-5. importar el código generado en este repo;
-6. reconciliar el resultado con el diseño aprobado;
-7. integrar REST directamente contra `citas-api`.
+## Desarrollo local
 
-No usar Express/BFF.
+1. Copia `.env.example` a `.env.local` si la API no está en `http://localhost:8080`.
+2. Ejecuta `npm install`.
+3. Ejecuta `npm run dev` y abre `http://localhost:5173`.
+
+El access JWT vive solo en memoria. El refresh JWT se recibe como cookie `HttpOnly` y se rota al restaurar la sesión. Las peticiones de login, refresh y logout incluyen credenciales y `X-Requested-With: XMLHttpRequest` conforme al contrato de seguridad.
+
+## Verificación
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+Las pantallas de agenda conservan datos sintéticos del prototipo hasta que sus HU backend sean implementadas. Recuperación de contraseña permanece fuera del alcance.
