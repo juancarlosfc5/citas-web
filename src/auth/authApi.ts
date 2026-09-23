@@ -168,6 +168,14 @@ export async function logout(): Promise<void> {
   clearUser();
 }
 
+export async function requestPasswordRecovery(email: string): Promise<void> {
+  return request<void>('/password-recovery', { method: 'POST', body: JSON.stringify({ email }) });
+}
+
+export async function resetPassword(token: string, password: string): Promise<void> {
+  return request<void>('/password-reset', { method: 'POST', body: JSON.stringify({ token, password }) });
+}
+
 export function getAccessToken(): string | null {
   return accessToken;
 }

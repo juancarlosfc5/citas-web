@@ -6,11 +6,13 @@ import { authErrorMessage, login } from '../auth/authApi';
 interface LoginScreenProps {
   onLoginSuccess: (user: User) => void;
   onNavigateRegister: () => void;
+  onNavigateRecovery?: () => void;
 }
 
 export const LoginScreen: React.FC<LoginScreenProps> = ({
   onLoginSuccess,
   onNavigateRegister,
+  onNavigateRecovery,
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -227,6 +229,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   <span className="text-slate-600 font-normal">Recordar sesión</span>
                 </label>
               </div>
+              <button type="button" onClick={onNavigateRecovery} className="text-xs text-blue-600 hover:text-blue-700">¿Olvidaste tu contraseña?</button>
 
               {/* Main Primary CTA Button */}
               <button
