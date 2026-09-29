@@ -44,6 +44,12 @@ describe('cierre de agendamiento: cliente REST', () => {
     expect(decided.status).toBe('REJECTED');
   });
 
+  it('consulta días disponibles de un rango', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(json([{ date: '2026-10-06', slots: 8 }]));
+    expect(await appointmentsApi.availableDays({ locationId: '1', specialtyId: '3', from: '2026-10-01', to: '2026-10-31' })).toEqual([{ date: '2026-10-06', slots: 8 }]);
+    expect(fetchMock.mock.calls[0][0]).toContain('/availability/days?locationId=1&specialtyId=3&from=2026-10-01&to=2026-10-31');
+  });
+
   it('normaliza identificadores numéricos de catálogos a texto', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(json([{ id: 3, name: 'Cardiología', durationMinutes: 60 }]));
     expect((await catalogsApi.specialties())[0].id).toBe('3');
