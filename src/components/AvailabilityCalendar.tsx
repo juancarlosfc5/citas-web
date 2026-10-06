@@ -51,7 +51,7 @@ export function AvailabilityCalendar({ month, minDate, availableDays, selectedDa
         const isSelected = date === selectedDate;
         const label = `${date}: ${slots ? `${slots} horarios disponibles` : 'sin disponibilidad'}`;
         return <button type="button" key={date} disabled={!slots || isLoading} aria-pressed={isSelected} aria-label={label} onClick={() => onSelectDate(date)}
-          className={`relative h-11 rounded-xl text-sm tabular transition-[background-color,color,transform] duration-150 ${isSelected ? 'bg-accent text-white font-semibold shadow-[0_6px_16px_-8px_rgb(15_92_87/0.8)]' : slots ? 'bg-accent-soft text-accent-ink font-semibold hover:bg-accent/15 active:scale-95 cursor-pointer' : 'text-line-strong cursor-not-allowed'}`}>
+          className={`relative h-11 rounded-xl text-sm tabular transition-[background-color,color,transform] duration-150 ${isSelected ? 'bg-accent text-white font-semibold shadow-[0_6px_16px_-8px_rgb(15_92_87/0.8)]' : slots ? 'bg-accent-soft text-accent-ink font-semibold hover:bg-accent/15 active:scale-95 cursor-pointer' : 'text-muted/50 cursor-not-allowed'}`}>
           {Number(date.slice(8))}
           {slots > 0 && !isSelected && <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />}
         </button>;

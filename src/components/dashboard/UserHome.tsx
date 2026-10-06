@@ -65,7 +65,7 @@ export function UserHome({ user, open, version }: { user: User; open: () => void
     .sort((a, b) => a.startAt.localeCompare(b.startAt))[0];
 
   return (
-    <div className="grid gap-5 lg:gap-6 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)] items-start">
+    <div className="grid gap-5 lg:gap-6 lg:grid-cols-[18.75rem_minmax(0,1fr)] xl:grid-cols-[21.25rem_minmax(0,1fr)] items-start">
       <div className="lg:col-span-2 animate-rise">
         <p className="text-sm text-muted">Hola,</p>
         <h1 className="font-display text-[2.5rem] sm:text-[3.25rem] leading-[0.95] tracking-[-0.015em] text-ink">{user.name}</h1>

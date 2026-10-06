@@ -8,7 +8,7 @@ import { Alert } from './ui/Surface';
 
 function Shell({ title, description, onBack, children }: { title: string; description: string; onBack: () => void; children: ReactNode }) {
   return (
-    <main className="w-full max-w-[460px] mx-auto animate-rise">
+    <main className="w-full max-w-[28.75rem] mx-auto animate-rise">
       <div className="mb-6 flex justify-center"><Brand caption="Recuperación de acceso" /></div>
       <div className="bg-surface rounded-shell border border-line/70 shadow-lift p-6 sm:p-9">
         <button type="button" onClick={onBack} className="-ml-1 mb-6 inline-flex items-center gap-1.5 min-h-9 px-1 text-sm text-ink-soft hover:text-ink cursor-pointer">

@@ -66,6 +66,10 @@
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
   }
+  /* Pantalla grande: escala todo el sistema (rem) para no dejar la interfaz diminuta. */
+  @media (min-width: 1536px) {
+    html { font-size: clamp(16px, 0.35vw + 10.6px, 19px); }
+  }
   body {
     @apply bg-canvas text-ink font-sans antialiased;
     font-feature-settings: "ss01", "cv11";

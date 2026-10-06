@@ -13,7 +13,7 @@ const ROLE_LABEL = { USER: 'Paciente', ADMIN: 'Administración', PROFESSIONAL: '
 export function DashboardScreen({ user, bookingsVersion = 0, onOpenBooking, onLogout }: Props) {
   const role = user.roles?.includes('ADMIN') ? 'ADMIN' : user.roles?.includes('PROFESSIONAL') ? 'PROFESSIONAL' : 'USER';
   return (
-    <div className="w-full max-w-[1400px] mx-auto pb-24 sm:pb-12">
+    <div className="w-full max-w-[87.5rem] mx-auto pb-24 sm:pb-12">
       <header className="sticky top-2 sm:top-4 z-40 mb-6 sm:mb-8 flex items-center justify-between gap-3 pl-3 pr-2 sm:pl-5 sm:pr-3 py-2 rounded-2xl bg-surface/85 backdrop-blur-md border border-line/70 shadow-card">
         <Brand caption={ROLE_LABEL[role]} compact />
         <div className="flex items-center gap-1.5 sm:gap-3">

@@ -39,7 +39,7 @@ function AgendaVignette() {
 
 export function AuthLayout({ id, caption, headline, lede, points, children, footer, wide = false }: Props) {
   return (
-    <main id={id} className="w-full max-w-[1180px] mx-auto animate-rise">
+    <main id={id} className="w-full max-w-[73.75rem] mx-auto animate-rise">
       <div className={`grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] ${wide ? 'xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]' : ''} bg-surface rounded-shell border border-line/70 shadow-lift overflow-hidden`}>
         <aside className="relative hidden lg:flex flex-col justify-between bg-night text-white p-10 xl:p-12 overflow-hidden">
           <div className="absolute inset-0 grain opacity-60 pointer-events-none" />

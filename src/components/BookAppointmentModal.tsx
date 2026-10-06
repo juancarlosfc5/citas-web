@@ -27,6 +27,7 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
   const [booked, setBooked] = useState<Appointment | null>(null);
   const [loading, setLoading] = useState(false); const [daysLoading, setDaysLoading] = useState(false); const [error, setError] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLElement>(null);
   const selectedProfessional = professionals.find((professional) => professional.id === professionalId);
   const selectedSpecialty = specialties.find((specialty) => specialty.id === specialtyId);
   const locationName = locations.find((item) => item.id === locationId)?.name;
@@ -62,6 +63,8 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
     document.addEventListener('keydown', onKey);
     return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', onKey); };
   }, [isOpen]);
+  // Cada paso empieza arriba para que su instrucción quede visible.
+  useEffect(() => { bodyRef.current?.scrollTo?.({ top: 0 }); }, [step, booked]);
   if (!isOpen) return null;
 
   const canContinue = step === 1 ? Boolean(locationId && specialtyId) : step === 2 ? Boolean(startAt && selectedProfessional) : true;
@@ -94,7 +97,7 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
         {[1, 2, 3].map((index) => <span key={index} className={`h-1 rounded-full transition-colors duration-300 ${booked || index <= step ? 'bg-accent' : 'bg-sunken'}`} />)}
       </div>
 
-      <main className="px-5 sm:px-7 py-6 overflow-y-auto overscroll-contain space-y-5 flex-1">
+      <main ref={bodyRef} className="px-5 sm:px-7 py-6 overflow-y-auto overscroll-contain space-y-5 flex-1">
         {error && <Alert>{error}</Alert>}
         {booked && <div className="flex flex-col items-center text-center gap-3 py-6">
           <span className={`grid place-items-center w-14 h-14 rounded-2xl ${booked.status === 'APPROVED' ? 'bg-success-soft text-success' : 'bg-warning-soft text-warning'}`}>{booked.status === 'APPROVED' ? <CheckCircle2 className="w-7 h-7" /> : <Clock3 className="w-7 h-7" />}</span>
