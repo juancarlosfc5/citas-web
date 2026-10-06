@@ -59,7 +59,7 @@ export default function App() {
               <div className="flex justify-between gap-4"><dt className="text-muted">Sede</dt><dd className="text-right">{confirmation.locationName}</dd></div>
               <div className="flex justify-between gap-4 items-center"><dt className="text-muted">Estado</dt><dd><StatusBadge status={confirmation.status} /></dd></div>
             </dl>
-            <Button size="lg" fullWidth className="mt-6" onClick={() => setConfirmation(null)}>Entendido</Button>
+            <Button size="lg" fullWidth className="mt-6" autoFocus onClick={() => setConfirmation(null)}>Entendido</Button>
           </section>
         </div>
       )}

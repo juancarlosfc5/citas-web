@@ -27,7 +27,9 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
   const [booked, setBooked] = useState<Appointment | null>(null);
   const [loading, setLoading] = useState(false); const [daysLoading, setDaysLoading] = useState(false); const [error, setError] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef(false);
+  loadingRef.current = loading;
   const selectedProfessional = professionals.find((professional) => professional.id === professionalId);
   const selectedSpecialty = specialties.find((specialty) => specialty.id === specialtyId);
   const locationName = locations.find((item) => item.id === locationId)?.name;
@@ -58,10 +60,20 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
     if (!isOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const trigger = document.activeElement as HTMLElement | null;
     dialogRef.current?.focus();
-    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') close(); };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !loadingRef.current) { close(); return; }
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+      // Mantiene el foco dentro del diálogo.
+      const focusable = [...dialogRef.current.querySelectorAll<HTMLElement>('button:not([disabled]), select, textarea, input, [tabindex="0"]')];
+      if (!focusable.length) return;
+      const first = focusable[0]; const last = focusable[focusable.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === dialogRef.current)) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
     document.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', onKey); };
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', onKey); trigger?.focus?.(); };
   }, [isOpen]);
   // Cada paso empieza arriba para que su instrucción quede visible.
   useEffect(() => { bodyRef.current?.scrollTo?.({ top: 0 }); }, [step, booked]);
@@ -81,6 +93,15 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
     } finally { setLoading(false); }
   };
 
+  // Radiogrupo: las flechas mueven y seleccionan, como un grupo de radio nativo.
+  const onRadioKey = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    const delta = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
+    if (!delta || !specialties.length) return;
+    event.preventDefault();
+    const next = (index + delta + specialties.length) % specialties.length;
+    setSpecialtyId(specialties[next].id);
+    (event.currentTarget.parentElement?.children[next] as HTMLElement | undefined)?.focus();
+  };
   const daysHint = Object.keys(availableDays).length || daysLoading ? 'Selecciona un día para ver sus horarios.' : 'No hay días disponibles este mes. Prueba el mes siguiente.';
 
   return <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-night/55 backdrop-blur-[2px] animate-fade" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
@@ -97,7 +118,7 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
         {[1, 2, 3].map((index) => <span key={index} className={`h-1 rounded-full transition-colors duration-300 ${booked || index <= step ? 'bg-accent' : 'bg-sunken'}`} />)}
       </div>
 
-      <main ref={bodyRef} className="px-5 sm:px-7 py-6 overflow-y-auto overscroll-contain space-y-5 flex-1">
+      <div ref={bodyRef} className="px-5 sm:px-7 py-6 overflow-y-auto overscroll-contain space-y-5 flex-1">
         {error && <Alert>{error}</Alert>}
         {booked && <div className="flex flex-col items-center text-center gap-3 py-6">
           <span className={`grid place-items-center w-14 h-14 rounded-2xl ${booked.status === 'APPROVED' ? 'bg-success-soft text-success' : 'bg-warning-soft text-warning'}`}>{booked.status === 'APPROVED' ? <CheckCircle2 className="w-7 h-7" /> : <Clock3 className="w-7 h-7" />}</span>
@@ -110,9 +131,10 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
           <p className="text-sm text-ink-soft">¿Qué especialidad necesitas? Luego elige la sede.</p>
           {loading && !specialties.length && <div aria-busy="true" className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">{[0, 1, 2].map((i) => <span key={i} className="h-[4.5rem] rounded-field bg-sunken animate-pulse" />)}</div>}
           <div role="radiogroup" aria-label="Especialidad" className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 gap-2.5">
-            {specialties.map((item) => {
+            {specialties.map((item, index) => {
               const isChecked = specialtyId === item.id;
-              return <button type="button" role="radio" aria-checked={isChecked} key={item.id} onClick={() => setSpecialtyId(item.id)} className={`flex items-start gap-3 p-3.5 text-left rounded-field border transition-[border-color,background-color,box-shadow] duration-200 cursor-pointer ${isChecked ? 'border-accent bg-accent-soft/70 ring-4 ring-accent/10' : 'border-line hover:border-line-strong hover:bg-canvas'}`}>
+              const isTabStop = isChecked || (!specialtyId && index === 0);
+              return <button type="button" role="radio" aria-checked={isChecked} key={item.id} tabIndex={isTabStop ? 0 : -1} onClick={() => setSpecialtyId(item.id)} onKeyDown={(event) => onRadioKey(event, index)} className={`flex items-start gap-3 p-3.5 text-left rounded-field border transition-[border-color,background-color,box-shadow] duration-200 cursor-pointer ${isChecked ? 'border-accent bg-accent-soft/70 ring-4 ring-accent/10' : 'border-line hover:border-line-strong hover:bg-canvas'}`}>
                 <span className={`grid place-items-center w-8 h-8 rounded-lg shrink-0 ${isChecked ? 'bg-accent text-white' : 'bg-sunken text-accent'}`}><Stethoscope className="w-4 h-4" /></span>
                 <span className="min-w-0"><strong className="block text-sm font-medium text-ink leading-snug">{item.name}</strong><span className="block text-xs text-muted mt-0.5 tabular">{item.durationMinutes} min</span></span>
               </button>;
@@ -158,7 +180,7 @@ export function BookAppointmentModal({ isOpen, onClose, onAppointmentBooked }: P
           <TextAreaField id="booking-reason" label="Motivo de consulta" value={reason} onChange={(event) => setReason(event.target.value)} rows={3} placeholder="Describe brevemente el motivo (opcional)" />
           <p className="flex gap-2.5 p-3.5 rounded-field bg-info-soft text-info text-[13px] leading-snug"><Shield className="w-4 h-4 mt-0.5 shrink-0" />Las citas generales se aprueban de inmediato. Las especializadas quedan pendientes de decisión administrativa.</p>
         </>}
-      </main>
+      </div>
 
       <footer className="px-5 sm:px-7 pt-4 safe-bottom sm:pb-5 border-t border-line flex items-center justify-between gap-3 bg-surface">
         {booked ? <Button size="lg" className="ml-auto w-full sm:w-auto" onClick={close}>Cerrar</Button> : <>

@@ -95,7 +95,7 @@ export function UserHome({ user, open, version }: { user: User; open: () => void
           <div className="mt-6 space-y-3">
             {error && <Alert>{error}</Alert>}
             {loading ? (
-              <div aria-busy="true" aria-label="Cargando citas" className="space-y-3"><AppointmentSkeleton /><AppointmentSkeleton /></div>
+              <div role="status" aria-busy="true" aria-label="Cargando citas" className="space-y-3"><AppointmentSkeleton /><AppointmentSkeleton /></div>
             ) : appointments.length ? (
               <ul className="space-y-3">
                 {appointments.map((a) => (
