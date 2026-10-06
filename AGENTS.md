@@ -14,10 +14,12 @@ La UI consume `citas-api` directamente por REST. No añadir Express, BFF ni lóg
 
 ## Fidelidad de diseño
 
-- Stitch/AI Studio aprobado es la fuente de verdad visual.
-- Preservar componentes, estilos y tokens correctos durante la reconciliación del código generado.
-- No rediseñar pantallas por preferencia técnica o estética.
-- Si no existe evidencia del diseño aprobado, identificarlo como bloqueo antes de una reconciliación visual; no inventar esa referencia.
+- **DECISIÓN (2026-10-06):** con el MVP finalizado, el proyecto entra en fase de mejora. El diseño Stitch/AI Studio deja de ser fuente de verdad visual obligatoria; se autoriza su evolución según `mejora_frontend.md`.
+- La fuente de verdad visual pasa a ser el sistema de tokens de `src/index.css` (`@theme`) y los componentes base de `src/components/ui/`.
+- La skill local `taste-skill` (`.claude/skills/`) guía las decisiones estéticas; no sustituye requisitos, HU ni contratos REST.
+- Toda pantalla debe ser responsive y verificarse en móvil (≥320 px), tablet (≥768 px), escritorio (≥1024 px) y pantalla grande (≥1536 px), sin scroll horizontal.
+- Los cambios visuales no alteran lógica, handlers, cliente REST (`src/api`, `src/auth`), `types.ts`, `citas-api` ni la base de datos.
+- Preservar textos accesibles, labels y roles usados por las pruebas; si un texto cambia, actualizar la prueba y documentarlo.
 
 ## Flujo por historia de usuario
 
