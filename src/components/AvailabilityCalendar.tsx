@@ -37,26 +37,26 @@ export function AvailabilityCalendar({ month, minDate, availableDays, selectedDa
   const formatted = MONTH_FORMAT.format(new Date(Date.UTC(year, index - 1, 1)));
   const title = formatted.charAt(0).toUpperCase() + formatted.slice(1);
   const canGoBack = month > monthOf(minDate);
-  return <section aria-label="Calendario de disponibilidad" className="p-4 rounded-xl border border-slate-200 bg-white">
+  return <section aria-label="Calendario de disponibilidad" className="p-3 sm:p-4 rounded-card border border-line bg-surface">
     <header className="flex items-center justify-between mb-3">
-      <button type="button" onClick={() => onMonthChange(shiftMonth(month, -1))} disabled={!canGoBack} aria-label="Mes anterior" className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-30"><ChevronLeft className="w-4 h-4" /></button>
-      <strong className="text-sm font-semibold text-slate-900">{title}</strong>
-      <button type="button" onClick={() => onMonthChange(shiftMonth(month, 1))} aria-label="Mes siguiente" className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"><ChevronRight className="w-4 h-4" /></button>
+      <button type="button" onClick={() => onMonthChange(shiftMonth(month, -1))} disabled={!canGoBack} aria-label="Mes anterior" className="grid place-items-center w-10 h-10 rounded-xl text-ink-soft hover:bg-sunken disabled:opacity-30 disabled:pointer-events-none cursor-pointer"><ChevronLeft className="w-4 h-4" /></button>
+      <strong className="font-display text-xl font-normal text-ink">{title}</strong>
+      <button type="button" onClick={() => onMonthChange(shiftMonth(month, 1))} aria-label="Mes siguiente" className="grid place-items-center w-10 h-10 rounded-xl text-ink-soft hover:bg-sunken cursor-pointer"><ChevronRight className="w-4 h-4" /></button>
     </header>
-    <div className="grid grid-cols-7 gap-1 text-center">
-      {WEEKDAYS.map((day) => <span key={day} className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase py-1">{day}</span>)}
+    <div className={`grid grid-cols-7 gap-1 text-center transition-opacity ${isLoading ? 'opacity-50' : ''}`}>
+      {WEEKDAYS.map((day) => <span key={day} className="text-[10px] font-medium tracking-[0.12em] text-muted uppercase py-1.5">{day}</span>)}
       {monthCells(month).map((date, position) => {
         if (!date) return <span key={`empty-${position}`} />;
         const slots = date >= minDate ? availableDays[date] ?? 0 : 0;
         const isSelected = date === selectedDate;
         const label = `${date}: ${slots ? `${slots} horarios disponibles` : 'sin disponibilidad'}`;
         return <button type="button" key={date} disabled={!slots || isLoading} aria-pressed={isSelected} aria-label={label} onClick={() => onSelectDate(date)}
-          className={`relative h-10 rounded-lg text-xs font-medium transition-colors ${isSelected ? 'bg-blue-600 text-white ring-2 ring-blue-500/20' : slots ? 'bg-blue-50 text-blue-700 hover:bg-blue-100' : 'text-slate-300 cursor-not-allowed'}`}>
+          className={`relative h-11 rounded-xl text-sm tabular transition-[background-color,color,transform] duration-150 ${isSelected ? 'bg-accent text-white font-semibold shadow-[0_6px_16px_-8px_rgb(15_92_87/0.8)]' : slots ? 'bg-accent-soft text-accent-ink font-semibold hover:bg-accent/15 active:scale-95 cursor-pointer' : 'text-line-strong cursor-not-allowed'}`}>
           {Number(date.slice(8))}
-          {slots > 0 && !isSelected && <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-600" />}
+          {slots > 0 && !isSelected && <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />}
         </button>;
       })}
     </div>
-    <p className="mt-3 text-[11px] text-slate-500">{isLoading ? 'Consultando días disponibles…' : 'Los días resaltados tienen horarios disponibles.'}</p>
+    <p className="mt-3 flex items-center gap-2 text-xs text-muted" aria-live="polite"><span aria-hidden="true" className="w-3 h-3 rounded bg-accent-soft border border-accent/30" />{isLoading ? 'Consultando días disponibles…' : 'Los días resaltados tienen horarios disponibles.'}</p>
   </section>;
 }
